@@ -36,3 +36,24 @@ If you want the clock to update locations automatically you will need to work ou
 
 While the hands are glued to the shafts there may still be some drift over time, if the hands stop consistently pointing to the correct location I have built in a Calibration option.  To access this go to [http://weasley-clock.local](http://weasley-clock.local) while connected to your home network and switch the "Access Calibration" switch (you will need to refresh the web page after changing the switch.  Once this is done you should see some additional options:
 
+![Screenshot 1](https://github.com/user-attachments/assets/2299fcb7-ba51-4c6d-b25c-e478cc0733c5)
+
+You now need to do the following:
+1. Select the location that needs calibration from the top
+2. Refresh the page to force the control location to update
+3. Slowly move the control until the hand is in the correct location (you can click the slider and use the arrow keys on the keyboard to move one small step at a time)
+4. Press the Save Calibration button for the corresponding hand - this will update the Location with the current hand position
+
+## Administration
+
+If needed you can upload an updated firmware for the clock by selecting "Allow OTA updates" and refreshing the page.  The Firmware files are in the Firmware section of the repository along with the ESPHome YAML file should you wish to make any changes yourself.  If needed you can reflash the firmware direct from a computer by unscewing the clock face and gently unplugging the USB extension cable to the control board.  When putting things back together I would suggeest plugging into the breakout board {PICTURE HERE} to avoid the servos pulling current through the controller.
+
+## Hardware
+
+> [!IMPORTANT]
+> The Hands are superglued to the shafts so if you need to take the clock apart let me know and I'll talk you through it.
+
++ Controller: ESP-32S Dev board
++ Hand Servos: [Tower Pro MG90S](https://towerpro.com.tw/product/mg90s-3/)
++ Gears and hands: 3D printed in PLA+
++ Fasteners: M2 grub screws (0.9mm Hex bit) for Gears, M5 Screws for main body.
