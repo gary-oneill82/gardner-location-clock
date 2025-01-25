@@ -13,12 +13,9 @@ logger:
 # Enable Home Assistant API
 api:
   reboot_timeout: 0s
-  encryption:
-    key: "LevwCl6eJmJc9uPrHAht7Q5gsT7IbQVXxgBOKr/+BpA="
 
 ota:
   - platform: esphome
-    password: "433b4e57f69f1e46059dd4da26c5c7de"
 
 wifi:
 
