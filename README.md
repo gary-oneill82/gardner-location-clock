@@ -24,7 +24,15 @@ The Control software has been written in [ESPHome](https://esphome.io/) and prov
 ```
 To Control the hands simply send a POST request, for example `http://weasley-clock.local/select/laura_location/set?option=Hogwarts`
 
+## Automation
+
 If you want the clock to update locations automatically you will need to work out the best way to do this for the two of you but there are a few options:
 
-1. We run our Smart house on [Home Assistant](https://www.home-assistant.io/) which integrates directly with ESPHome devices and can be programmed with automations
-2. 
+1. We run our Smart house on [Home Assistant](https://www.home-assistant.io/) which integrates directly with ESPHome devices, has iOS and Android apps that can report location back to the server and can be programmed with automations, this is pretty much an all in one solution.
+2. OwnTracks is open source and requires a phone app and server at home (can be a Rapberry Pi) as used in [this project](https://github.com/WhereslyClock/MyWhereslyClock), you then just have to work out the bridge to send the POST request to the Clock
+3. Any other loction tracking service with an API should work as well so long as you write a middle-man programme to report to the clock where you each are!
+
+## Calibration
+
+While the hands are glued to the shafts there may still be some drift over time, if the hands stop consistently pointing to the correct location I have built in a Calibration option.  To access this go to [http://weasley-clock.local](http://weasley-clock.local) while connected to your home network and switch the "Access Calibration" switch (you will need to refresh the web page after changing the switch.  Once this is done you should see some additional options:
+
