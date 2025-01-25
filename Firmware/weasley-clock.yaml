@@ -1,0 +1,405 @@
+esphome:
+  name: weasley-clock
+  friendly_name: Weasley Clock
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  reboot_timeout: 0s
+  encryption:
+    key: "LevwCl6eJmJc9uPrHAht7Q5gsT7IbQVXxgBOKr/+BpA="
+
+ota:
+  - platform: esphome
+    password: "433b4e57f69f1e46059dd4da26c5c7de"
+
+wifi:
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Location-Clock"
+    password: "alohamora"
+
+captive_portal:
+
+globals:
+ #paul
+  - id: paul_target
+    type: int
+    restore_value: True
+    initial_value: '0'
+  - id: paul_home
+    type: int
+    restore_value: True
+    initial_value: '0'
+  - id: paul_hogwarts
+    type: int
+    restore_value: True
+    initial_value: '30'
+  - id: paul_work
+    type: int
+    restore_value: True
+    initial_value: '60'
+  - id: paul_hogsmede
+    type: int
+    restore_value: True
+    initial_value: '90'
+  - id: paul_quiddich
+    type: int
+    restore_value: True
+    initial_value: '120'
+  - id: paul_holiday
+    type: int
+    restore_value: True
+    initial_value: '-150'
+  - id: paul_crieff_hydro
+    type: int
+    restore_value: True
+    initial_value: '-120'
+  - id: paul_in_transit
+    type: int
+    restore_value: True
+    initial_value: '-90'
+  - id: paul_mortal_peril
+    type: int
+    restore_value: True
+    initial_value: '-60'
+  - id: paul_lost
+    type: int
+    restore_value: True
+    initial_value: '-30'
+ #laura
+  - id: laura_target
+    type: int
+    restore_value: True
+    initial_value: '0'
+  - id: laura_home
+    type: int
+    restore_value: True
+    initial_value: '0'
+  - id: laura_hogwarts
+    type: int
+    restore_value: True
+    initial_value: '30'
+  - id: laura_work
+    type: int
+    restore_value: True
+    initial_value: '60'
+  - id: laura_hogsmede
+    type: int
+    restore_value: True
+    initial_value: '90'
+  - id: laura_quiddich
+    type: int
+    restore_value: True
+    initial_value: '120'
+  - id: laura_holiday
+    type: int
+    restore_value: True
+    initial_value: '-150'
+  - id: laura_crieff_hydro
+    type: int
+    restore_value: True
+    initial_value: '-120'
+  - id: laura_in_transit
+    type: int
+    restore_value: True
+    initial_value: '-90'
+  - id: laura_mortal_peril
+    type: int
+    restore_value: True
+    initial_value: '-60'
+  - id: laura_lost
+    type: int
+    restore_value: True
+    initial_value: '-30'
+
+web_server:
+  include_internal: false
+  version: 3
+  id: web_server_1
+  ota: False
+  log: False
+  auth: 
+    username: harry_potter
+    password: alohamora
+  sorting_groups:
+    - id: clock_control
+      name: "Controls"
+      sorting_weight: -1
+    - id: clock_config
+      name: "Calibration"
+      sorting_weight: 20
+    - id: clock_admin
+      name: "Administration"
+      sorting_weight: 30
+
+output:
+  - platform: ledc
+    id: servo_output_laura
+    pin: GPIO32
+    frequency: 50 Hz
+  - platform: ledc
+    id: servo_output_paul
+    pin: GPIO33
+    frequency: 50 Hz
+
+servo:
+  - id: laura_servo
+    output: servo_output_laura
+    min_level: 3%
+    max_level: 12%
+    auto_detach_time: 0.5s
+  - id: paul_servo
+    output: servo_output_paul
+    min_level: 3%
+    max_level: 12%
+    auto_detach_time: 0.5s
+
+switch:
+  - platform: template
+    name: "Access Calibration"
+    optimistic: True
+    restore_mode: ALWAYS_OFF
+    web_server:
+      sorting_group_id: clock_control
+      sorting_weight: 3
+    turn_on_action: 
+      then:
+        lambda: |-
+          id(web_server_1).set_include_internal(true) ;
+    turn_off_action: 
+      then:
+        lambda: |-  
+          id(web_server_1).set_include_internal(false) ;
+  - platform: template
+    name: "Allow OTA updates"
+    optimistic: True
+    internal: True
+    restore_mode: RESTORE_DEFAULT_OFF
+    web_server:
+      sorting_group_id: clock_admin
+      sorting_weight: 90
+    turn_on_action: 
+      then:
+        lambda: |-
+          id(web_server_1).set_allow_ota(true) ;
+    turn_off_action: 
+      then:
+        lambda: |-  
+          id(web_server_1).set_allow_ota(false) ;
+
+number:
+  - platform: template
+    name: Laura Control
+    id: laura_control
+    internal: True
+    min_value: -180
+    initial_value: 0
+    max_value: 180
+    step: 2
+    optimistic: true
+    restore_value: True
+    web_server:
+      sorting_group_id: clock_config
+      sorting_weight: 30
+    set_action:
+      then:
+        - servo.write:
+            id: laura_servo
+            level: !lambda 'return x /180;'
+  - platform: template
+    name: Paul Control
+    id: paul_control
+    internal: True
+    min_value: -180
+    initial_value: 0
+    max_value: 180
+    step: 2
+    optimistic: true
+    restore_value: True
+    web_server:
+      sorting_group_id: clock_config
+      sorting_weight: 50
+    set_action:
+      then:
+        - servo.write:
+            id: paul_servo
+            level: !lambda 'return x /180;'
+
+button:
+  - platform: restart
+    name: "Clock Restart"
+    internal: True
+    web_server:
+      sorting_group_id: clock_admin
+      sorting_weight: 100
+  - platform: template
+    id: save_paul_calibration
+    name: "Save Paul Hand Calibration"
+    internal: True
+    web_server:
+      sorting_group_id: clock_config
+      sorting_weight: 60
+    on_press: 
+      then:
+        - lambda: |-
+            if (id(paul_location).state == "Home"){ id(paul_home) = id(paul_control).state;}
+            else if (id(paul_location).state == "Hogwarts"){ id(paul_hogwarts) = id(paul_control).state;}
+            else if (id(paul_location).state == "Work"){ id(paul_work) = id(paul_control).state;}
+            else if (id(paul_location).state == "Hogsmede"){ id(paul_hogsmede) = id(paul_control).state;}
+            else if (id(paul_location).state == "Quiddich"){ id(paul_quiddich) = id(paul_control).state;}
+            else if (id(paul_location).state == "Holiday"){ id(paul_holiday) = id(paul_control).state;}
+            else if (id(paul_location).state == "Crieff Hydro"){ id(paul_crieff_hydro) = id(paul_control).state;}
+            else if (id(paul_location).state == "In Transit"){ id(paul_in_transit) = id(paul_control).state;}
+            else if (id(paul_location).state == "Mortal Peril"){ id(paul_mortal_peril) = id(paul_control).state;}
+            else if (id(paul_location).state == "Lost"){id(paul_lost) = id(paul_control).state;}
+  - platform: template
+    id: save_laura_calibration
+    name: "Save Laura Hand Calibration"
+    internal: True
+    web_server:
+      sorting_group_id: clock_config
+      sorting_weight: 40
+    on_press: 
+      then:
+        - lambda: |-
+            if (id(laura_location).state == "Home"){id(laura_home) = id(laura_control).state;}
+            else if (id(laura_location).state == "Hogwarts"){id(laura_hogwarts) = id(laura_control).state;}
+            else if (id(laura_location).state == "Work"){id(laura_work) = id(laura_control).state;}
+            else if (id(laura_location).state == "Hogsmede"){id(laura_hogsmede) = id(laura_control).state;}
+            else if (id(laura_location).state == "Quiddich"){id(laura_quiddich) = id(laura_control).state;}
+            else if (id(laura_location).state == "Holiday"){id(laura_holiday) = id(laura_control).state;}
+            else if (id(laura_location).state == "Crieff Hydro"){id(laura_crieff_hydro) = id(laura_control).state;}
+            else if (id(laura_location).state == "In Transit"){id(laura_in_transit) = id(laura_control).state;}
+            else if (id(laura_location).state == "Mortal Peril"){id(laura_mortal_peril) = id(laura_control).state;}
+            else if (id(laura_location).state == "Lost"){id(laura_lost) = id(laura_control).state;}
+
+script:
+  - id: hand_move_paul #paul move script
+    mode: restart
+    then:
+      if:
+        condition:
+          lambda: 'return id(paul_control).state < id(paul_target);'
+        then:
+          while:
+            condition:
+              lambda: 'return id(paul_control).state < id(paul_target);'
+            then:
+              - number.increment: paul_control
+              - delay: 0.01s
+        else:
+          while:
+            condition:
+              lambda: 'return id(paul_control).state > id(paul_target);'
+            then:
+              - number.decrement: paul_control
+              - delay: 0.01s
+  - id: hand_move_laura #laura move script
+    mode: restart
+    then:
+      if:
+        condition:
+          lambda: 'return id(laura_control).state < id(laura_target);'
+        then:
+          while:
+            condition:
+              lambda: 'return id(laura_control).state < id(laura_target);'
+            then:
+              - number.increment: laura_control
+              - delay: 0.01s
+        else:
+          while:
+            condition:
+              lambda: 'return id(laura_control).state > id(laura_target);'
+            then:
+              - number.decrement: laura_control
+              - delay: 0.01s
+
+select:
+  - platform: template #paul location
+    id: paul_location
+    name: "Paul Location"
+    internal: False
+    restore_value: True
+    optimistic: True
+    web_server:
+      sorting_group_id: clock_control
+      sorting_weight: 1
+    options: 
+      - "Home"
+      - "Hogwarts"
+      - "Work"
+      - "Hogsmede"
+      - "Quiddich"
+      - "Holiday"
+      - "Crieff Hydro"
+      - "In Transit"
+      - "Mortal Peril"
+      - "Lost"
+    set_action: 
+      then:
+        - delay: 0.1s
+        - globals.set:
+            id: paul_target
+            value: !lambda |-
+              if (id(paul_location).state == "Home"){return id(paul_home);}
+              else if (id(paul_location).state == "Hogwarts"){return id(paul_hogwarts);}
+              else if (id(paul_location).state == "Work"){return id(paul_work);}
+              else if (id(paul_location).state == "Hogsmede"){return id(paul_hogsmede);}
+              else if (id(paul_location).state == "Quiddich"){return id(paul_quiddich);}
+              else if (id(paul_location).state == "Holiday"){return id(paul_holiday);}
+              else if (id(paul_location).state == "Crieff Hydro"){return id(paul_crieff_hydro);}
+              else if (id(paul_location).state == "In Transit"){return id(paul_in_transit);}
+              else if (id(paul_location).state == "Mortal Peril"){return id(paul_mortal_peril);}
+              else if (id(paul_location).state == "Lost"){return id(paul_lost);}
+              else {return 0;}
+        - script.execute:
+            id: hand_move_paul
+  - platform: template #laura location
+    id: laura_location
+    name: "Laura Location"
+    internal: False
+    restore_value: True
+    optimistic: True
+    web_server:
+      sorting_group_id: clock_control
+      sorting_weight: 2
+    options: 
+      - "Home"
+      - "Hogwarts"
+      - "Work"
+      - "Hogsmede"
+      - "Quiddich"
+      - "Holiday"
+      - "Crieff Hydro"
+      - "In Transit"
+      - "Mortal Peril"
+      - "Lost"
+    set_action: 
+      then:
+        - delay: 0.1s
+        - globals.set:
+            id: laura_target
+            value: !lambda |-
+              if (id(laura_location).state == "Home"){return id(laura_home);}
+              else if (id(laura_location).state == "Hogwarts"){return id(laura_hogwarts);}
+              else if (id(laura_location).state == "Work"){return id(laura_work);}
+              else if (id(laura_location).state == "Hogsmede"){return id(laura_hogsmede);}
+              else if (id(laura_location).state == "Quiddich"){return id(laura_quiddich);}
+              else if (id(laura_location).state == "Holiday"){return id(laura_holiday);}
+              else if (id(laura_location).state == "Crieff Hydro"){return id(laura_crieff_hydro);}
+              else if (id(laura_location).state == "In Transit"){return id(laura_in_transit);}
+              else if (id(laura_location).state == "Mortal Peril"){return id(laura_mortal_peril);}
+              else if (id(laura_location).state == "Lost"){return id(laura_lost);}
+              else {return 0;}
+        - script.execute:
+            id: hand_move_laura
