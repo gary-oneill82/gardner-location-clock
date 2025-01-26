@@ -36,7 +36,7 @@ If you want the clock to update locations automatically you will need to work ou
 
 While the hands are glued to the shafts there may still be some drift over time, if the hands stop consistently pointing to the correct location I have built in a Calibration option.  To access this go to [http://weasley-clock.local](http://weasley-clock.local) while connected to your home network and switch the "Access Calibration" switch (you will need to refresh the web page after changing the switch.  Once this is done you should see some additional options:
 
-![Screenshot 1](https://github.com/user-attachments/assets/2299fcb7-ba51-4c6d-b25c-e478cc0733c5)
+![Screenshot 2](https://github.com/user-attachments/assets/a84e5988-4b7a-4493-8ec3-a6820fa307ac)
 
 You now need to do the following:
 1. Select the location that needs calibration from the top
