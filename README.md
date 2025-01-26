@@ -34,19 +34,19 @@ If you want the clock to update locations automatically you will need to work ou
 
 ## Calibration
 
-While the hands are glued to the shafts there may still be some drift over time, if the hands stop consistently pointing to the correct location I have built in a Calibration option.  To access this go to [http://weasley-clock.local](http://weasley-clock.local) while connected to your home network and switch the "Access Calibration" switch (you will need to refresh the web page after changing the switch.  Once this is done you should see some additional options:
+While the hands are glued to the shafts there may still be some drift over time, if the hands stop consistently pointing to the correct location I have built in a Calibration option.  To access this go to [http://weasley-clock.local](http://weasley-clock.local) while connected to your home network and switch the "Access Calibration" switch (you will need to refresh the web page after changing the switch).  Once this is done you should see some additional options:
 
 ![Screenshot 2](https://github.com/user-attachments/assets/a84e5988-4b7a-4493-8ec3-a6820fa307ac)
 
 You now need to do the following:
-1. Select the location that needs calibration from the top
+1. Select the person + location that needs calibration from the top
 2. Refresh the page to force the control location to update
 3. Slowly move the control until the hand is in the correct location (you can click the slider and use the arrow keys on the keyboard to move one small step at a time)
 4. Press the Save Calibration button for the corresponding hand - this will update the Location with the current hand position
 
 ## Administration
 
-If needed you can upload an updated firmware for the clock by selecting "Allow OTA updates" and refreshing the page.  The Firmware files are in the Firmware section of the repository along with the ESPHome YAML file should you wish to make any changes yourself.  If needed you can reflash the firmware direct from a computer by unscewing the clock face and gently unplugging the USB extension cable to the control board.  When putting things back together I would suggeest plugging into the breakout board to avoid the servos pulling current through the controller.
+If needed you can upload an updated firmware for the clock by selecting "Allow OTA updates" and refreshing the page.  The Firmware files are in the Firmware section of the repository along with the ESPHome YAML file should you wish to make any changes yourself.  If needed you can reflash the firmware direct from a computer by unscewing the clock face and gently unplugging the USB extension cable to the control board.  You can then plug the ESP-32S board direct into the computer to be presented with a serial port, you will need to hold the small "boot" button on the board and press the "reset" button to enable the bootloader mode.  When putting things back together I would suggeest plugging into the breakout board to avoid the servos pulling current through the controller.
 
 ![IMG_20250125_200230~2](https://github.com/user-attachments/assets/0cf89c83-4a6e-46ef-acdc-315c0663ce97)
 
