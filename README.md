@@ -46,7 +46,9 @@ You now need to do the following:
 
 ## Administration
 
-If needed you can upload an updated firmware for the clock by selecting "Allow OTA updates" and refreshing the page.  The Firmware files are in the Firmware section of the repository along with the ESPHome YAML file should you wish to make any changes yourself.  If needed you can reflash the firmware direct from a computer by unscewing the clock face and gently unplugging the USB extension cable to the control board.  When putting things back together I would suggeest plugging into the breakout board {PICTURE HERE} to avoid the servos pulling current through the controller.
+If needed you can upload an updated firmware for the clock by selecting "Allow OTA updates" and refreshing the page.  The Firmware files are in the Firmware section of the repository along with the ESPHome YAML file should you wish to make any changes yourself.  If needed you can reflash the firmware direct from a computer by unscewing the clock face and gently unplugging the USB extension cable to the control board.  When putting things back together I would suggeest plugging into the breakout board to avoid the servos pulling current through the controller.
+
+![IMG_20250125_200230~2](https://github.com/user-attachments/assets/0cf89c83-4a6e-46ef-acdc-315c0663ce97)
 
 ## Hardware
 
